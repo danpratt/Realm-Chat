@@ -47,6 +47,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   private func persist(messages: [(String, String)]) {
     // Persist a list of messages to database
-    
+    SyncManager.shared.logLevel = .off
+    DispatchQueue.global(qos: .background).async {
+        let objects = messages.map { message in
+            return Message(from: message.0, text: message.1)
+        }
+        let realm = try! Realm()
+        try! realm.write {
+            realm.add(objects)
+        }
+    }
   }
 }

@@ -31,10 +31,12 @@ import RealmSwift
 
 class StatsViewController: UIViewController {
 
-  @IBOutlet var statsLabel: UILabel!
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
+    @IBOutlet var statsLabel: UILabel!
     
-  }
+    private var messagesToken: NotificationToken?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    
+    }
 }
