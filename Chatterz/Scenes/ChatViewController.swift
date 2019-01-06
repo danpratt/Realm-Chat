@@ -43,8 +43,15 @@ class ChatViewController: UITableViewController {
         messages = realm.objects(Message.self)
         .sorted(byKeyPath: Message.properties.date, ascending: false)
         
-        messagesToken = messages!.observe { [weak self] _ in
-            self?.tableView.reloadData()
+        messagesToken = messages!.observe { [weak self] changes in
+            switch changes {
+            case .initial(_):
+                self?.tableView.reloadData()
+            case .update(_, let deletions, let insertions, let updates):
+                self?.tableView.applyChanges(deletions: deletions, insertions: insertions, updates: updates)
+            case .error(let error):
+                fatalError("There was an error: \(error)")
+            }
         }
     }
 
@@ -89,7 +96,10 @@ extension ChatViewController {
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        guard editingStyle == .delete else { return }
-
+        guard editingStyle == .delete, let message = messages?[indexPath.row] else { return }
+        let realm = try! Realm()
+        try! realm.write {
+            realm.delete(message)
+        }
     }
 }
