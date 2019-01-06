@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
   private let api = ChatAPI()
 
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
     // Connect to mocked API
     api.connect { [unowned self] newMessages in
