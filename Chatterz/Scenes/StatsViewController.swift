@@ -37,6 +37,20 @@ class StatsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // setup realm
+        let realm = try! Realm()
+        let  messages = realm.objects(Message.self)
+        
+        // setup messages observer token
+        messagesToken = messages.observe { [weak self] _ in
+            guard let this = self else { return }
+            
+            UIView.transition(with: this.statsLabel, duration: 0.33, options: [.transitionFlipFromTop], animations: {
+                this.statsLabel.text = "Total messages: \(messages.count)"
+            }, completion: nil)
+        }
+       
     
     }
 }
